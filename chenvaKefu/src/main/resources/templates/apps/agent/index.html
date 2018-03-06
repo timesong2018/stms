@@ -1,0 +1,81 @@
+<script id="message_tpl" type="text/html">
+	<div class="clearfix chat-block" <%if(data.type == 'writing'){%>id="writing"<%}%>>
+		<div class="<% if(data.userid == '${user.id!''}'){%>chat-right<%}else{%>chat-left<%}%>">
+			<img alt="" src="<% if(data.headimgurl && data.headimgurl !=''){%><%=data.headimgurl%><%}else{%>/im/img/user.png<%} %>" class="user-img" style="width:45px;height:45px;">
+			<div class="chat-message">
+				<% if(data.userid == '${user.id!''}') {%>
+					<span class="time"><%=data.createtime%></span>
+					<span class="user"><%=data.username%></span>
+				<% }else{%>
+					<span class="user"><%=data.username%></span>
+					<span class="time"><%=data.createtime%></span>
+					
+				<%}%>
+			</div>
+			<div class="<% if(data.userid == '${user.id!''}'){%>chatting-right<%}else{%>chatting-left<%}%>">
+				<i class="userarrow"></i>
+				<div class="chat-content">
+					<% if(data.msgtype == 'image'){ %>
+						<img src="<%:=data.message%>" class="ukefu-media-image">		
+					<%}else{%>
+						<%:=data.message%>
+					<%}%>					
+				</div>
+				<%if(data.type == 'writing'){%>
+					<div class="chat-writing-message" title="正在输入...">
+						<span class="loading">
+							<span></span>
+							<span></span>
+							<span></span>
+							<span></span>
+						</span>
+					</div>						
+				<%}%>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="end_tpl" type="text/html">
+	<div class="clearfix chat-block connect-end" id="agentuser-curstatus">
+		<span class="connect-message">用户“<%=data.username%>”已经离开</span>
+	</div>
+</script>
+<script id="begin_tpl" type="text/html">
+	<div class="clearfix chat-block connect-begin" id="agentuser-curstatus">
+		<span class="connect-message">用户“<%=data.username%>”开始对话</span>
+	</div>
+</script>
+<#if agentUserList?? && agentUserList?size gt 0>
+	<div class="layui-side layui-bg-black layui-left-black">
+		<div class="layui-side-scroll" id="agentusers">
+			<#include "/apps/agent/agentusers.html"/>
+		</div>
+	</div>
+	<div class="layui-body ukefu-chat-agent" id="ukefu-chat-agent">
+		<#include "/apps/agent/mainagentuser.html">
+	</div>
+<#else>
+	<div class="layui-layout layui-layout-content"  style="height: 100%;">
+		<div class="box default-box" style="height: 100%;">
+			<div class="box-header">
+				<h3 class="box-title">坐席对话</h3>
+			</div>
+			<div class="box-body ukefu-im-theme">
+				<div class="ukefu-empty">
+					<i class="layui-icon">&#xe63a;</i>
+					<div style="">还没有分配记录</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+</#if>
+<#if agentUserList?? && agentUserList?size gt 0>
+<script language="javascript">
+	$(document).ready(function(){
+		$(document).bind("keydown", "Ctrl+return", function (ev) { 
+			sendMessage() ;
+			return false; 
+		})
+	});
+</script>
+</#if>
